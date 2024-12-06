@@ -1,23 +1,29 @@
-#ROW{
+.ROW{
     display: flex;
     justify-content: center;
     align-items: center;
 }
-#ROW-MARK{
+.ROW-MARK{
     display: flex;
     justify-content: center;
     align-items: center;
 }
-#COL{
+.COL{
     padding: 10px;
-    background: #ededed;
     margin: 5px;
     cursor: pointer;
     border-radius: 5px;
 }
-#COL:hover{
+.COL:hover{
     opacity: 0.8;
 }
-#COL[state="selected"]{
+.COL{
     background: lightblue;
+}
+.COL.selected{
+    background: rgb(85, 168, 196);
+}
+.COL.disabled{
+    background: #ededed;
+    pointer-events: none;
 }

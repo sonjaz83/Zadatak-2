@@ -16,14 +16,21 @@ let gridArray = []; //[]ove zagrade znace newArray
 for (let i = 0; i < x; i++) {
   gridArray[i] = [];
   gridArray[i] = row = document.createElement('div'); //pravi div row
-  row.setAttribute("id", "ROW-MARK");
+  row.setAttribute("class", "ROW-MARK");
+  row.setAttribute("id", i);
   for (let j = 0; j < y; j++) {
 
     gridArray[i][j] = seat = document.createElement('div'); //pravi div seat
-    seat.setAttribute("id", "COL");
+
+    seat.available = true;
+    seat.selected = false;
+
+    seat.setAttribute("class", "COL available");
+    seat.setAttribute("id", i + '-' + j);
     // seat.setAttribute("state", "");
     seat.setAttribute("row", i);
     seat.setAttribute("col", j);
+
 
 
     //cena ako je m neparan
@@ -58,32 +65,117 @@ for (let i = 0; i < x; i++) {
   }
 }
 function clickSeat() {
+  //susedna polja
+  //uzeti vrednosti kliknutog polja
+  a = this.getAttribute("row");
+  b = this.getAttribute("col");
+
+  // slobodno polje treba da ima isti row kao selektovano polje
+  let selectedRow = a;
+  // prethodno i naredno polje
+  let seatBefore = b;
+  seatBefore--; // adds 1 to num
+  // console.log(seatBefore); 
+  let seatAfter = b;
+  seatAfter++; // adds 1 to num
+  // console.log(seatAfter);
+
+  //id-jevi prethodnog i narednog elementa
+  availableIdBefore = selectedRow + '-' + seatBefore;
+  availableIdAfter = selectedRow + '-' + seatAfter;
+
+  let prev = document.getElementById(availableIdBefore);
+  let next = document.getElementById(availableIdAfter);
+
+
+
+  //states
+  //open
+  const available = this.classList.contains("available");
+  //disabled
+  const disabled = this.classList.contains("disabled");
+  //selected
+  const selected = this.classList.contains("selected");
+  let availableElements = document.getElementsByClassName("available");
+  let selectedElements = document.getElementsByClassName("selected");
+  let disabledElements = document.getElementsByClassName("disabled");
+
+  // console.log(availableElements);
+  // console.log(selectedElements);
+  // console.log(disabledElements);
 
   //provera da li ima atribut selected
-  if (this.hasAttribute("state", "selected")) {
-    this.removeAttribute("state");
+  // if (selected) {
+  // this.classList.toggle("selected");
 
-  }else{
-      //ako nema dodaj atribut selected
-    this.setAttribute("state", "selected");
+  // //nadji prethodni i naredni id
+
+  // prev.classList.toggle("available");
+  // next.classList.toggle("available");
+  console.log('aaa' + availableElements.length);
+  console.log('aaa' + selectedElements.length);
+  console.log('aaa' + disabledElements.length);
+
+  // } else{
+  this.classList.replace("available", "selected");
+  // prev.classList.toggle("available");
+  // next.classList.toggle("available");
+
+  let g = 0;
+  while (g < availableElements.length) {
+
+    console.log('bbb' + availableElements.length);
+    console.log('bbb' + selectedElements.length);
+    console.log('bbb' + disabledElements.length);
+    // console.log(availableElements[i].classList.contains("available").id);
+
+    if (availableElements[g].classList.contains("available") &&
+      availableElements[g].id != availableIdBefore &&
+      availableElements[g].id != availableIdAfter) {
+
+      // console.log(availableElements[g].id);
+      availableElements[g].classList.replace("available", "disabled");
+    }
+    g++;
   }
-  
+  // }
+
+  //svi elementi su enablovani
+  //click - jedan selektovan, susedna dva available, ostali disablovani
+  //click na el. koji je selektovan - obrisati selected sa njega i available sa susednih
+
+
+
 
   //posalji price u element za prikaz cene
-  var c = document.querySelectorAll('[state="selected"]');    //<--- array of seats
-  console.log(c.length);
-  var tot = 0;
-  for (var i = 0; i < c.length; i++) {
-    tot += c[i].price;
+  let selectedPrice = document.querySelectorAll('[state="selected"]');    //<--- array of seats
+
+  // dodavanje vrednosti
+  let tot = 0;
+  for (let i = 0; i < selectedPrice.length; i++) {
+    tot += selectedPrice[i].price;
   }
+
+  //dodaj value u sumu
   document.getElementById('value').innerText = tot;
 
+
+
+  //proci grid
+
+  // let getSeat = document.getElementById('COL'); 
+  // for (let i = 0; i < getSeat.length; i++) {
+  //   console.log(3);
+  // }
 
   //proci ceo grid i proveriti da li postoje elementi 
   //za min i max vrednost j iz array-a
   //i=i i j=j-1 ili j=j+1
   ////ako postoje dodati klasu selectable
   ////svim ostalim elementima dodati klasu disabled
+}
+function getSelectedElement() {
+
 }
 function confirmSeats() {
   //da li ste sigurni da zelite da kupite
