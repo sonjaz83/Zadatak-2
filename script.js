@@ -1,8 +1,6 @@
 //////ARRAY
 
 
-
-
 const grid = document.getElementById("grid");
 
 const searchParams = new URLSearchParams(window.location.search); //izvlacenje broja redova i kolona iz adrese
@@ -69,24 +67,8 @@ function clickSeat() {
   //uzeti vrednosti kliknutog polja
   a = this.getAttribute("row");
   b = this.getAttribute("col");
-
-  // slobodno polje treba da ima isti row kao selektovano polje
-  let selectedRow = a;
-  // prethodno i naredno polje
-  let seatBefore = b;
-  seatBefore--; // adds 1 to num
-  // console.log(seatBefore); 
-  let seatAfter = b;
-  seatAfter++; // adds 1 to num
-  // console.log(seatAfter);
-
-  //id-jevi prethodnog i narednog elementa
-  availableIdBefore = selectedRow + '-' + seatBefore;
-  availableIdAfter = selectedRow + '-' + seatAfter;
-
-  let prev = document.getElementById(availableIdBefore);
-  let next = document.getElementById(availableIdAfter);
-
+  //id kliknutog polja je //ne koristi se jos
+  let selectedId = this.id;
 
 
   //states
@@ -100,64 +82,39 @@ function clickSeat() {
   let selectedElements = document.getElementsByClassName("selected");
   let disabledElements = document.getElementsByClassName("disabled");
 
-  // console.log(availableElements);
-  // console.log(selectedElements);
-  // console.log(disabledElements);
-
-  //provera da li ima atribut selected
-  // if (selected) {
-  // this.classList.toggle("selected");
-
-  // //nadji prethodni i naredni id
-
-  // prev.classList.toggle("available");
-  // next.classList.toggle("available");
-  console.log('aaa' + availableElements.length);
-  console.log('aaa' + selectedElements.length);
-  console.log('aaa' + disabledElements.length);
-
-  // } else{
   this.classList.replace("available", "selected");
-  // prev.classList.toggle("available");
-  // next.classList.toggle("available");
 
-  let g = 0;
-  while (g < availableElements.length) {
 
-    console.log('bbb' + availableElements.length);
-    console.log('bbb' + selectedElements.length);
-    console.log('bbb' + disabledElements.length);
-    // console.log(availableElements[i].classList.contains("available").id);
+  //uzmi sve elemente sa klasom selected, a onda pre prvog i posle poslednjeg dodaj available klasu
+  let selectedLenght = selectedElements.length;
+  let price = 0; //cena
+  for (let h = 0; h < selectedLenght; h++) { //niz selektovanih polja
 
-    if (availableElements[g].classList.contains("available") &&
-      availableElements[g].id != availableIdBefore &&
-      availableElements[g].id != availableIdAfter) {
+    for (let r = 0; r < x; r++) { //niz row-ova
+      for (let c = 0; c < y; c++) { //niz kolona
 
-      // console.log(availableElements[g].id);
-      availableElements[g].classList.replace("available", "disabled");
+        //naci min i max elemente
+        let previousSeat = selectedElements[0].previousSibling;
+        let nextElSeat = selectedElements[selectedLenght - 1].nextSibling;
+
+        if (previousSeat !== null && nextElSeat !== null) {
+
+          //dati available jedan ispred i jedan iza
+          previousSeat.classList.replace("disabled", "available");
+          nextElSeat.classList.replace("disabled", "available");
+
+          //disablovati sve ostalo osim selektovanih, prethodnog i sledeceg mesta:
+          let seatId = document.getElementById(r + '-' + c);
+          if ((r + '-' + c) != previousSeat.id && (r + '-' + c) != nextElSeat.id) {
+            seatId.classList.replace("available", "disabled");
+          }
+        }
+      }
     }
-    g++;
+    //izracunavanje cene
+    price += selectedElements[h].price;
+    document.getElementById('value').innerText = price;
   }
-  // }
-
-  //svi elementi su enablovani
-  //click - jedan selektovan, susedna dva available, ostali disablovani
-  //click na el. koji je selektovan - obrisati selected sa njega i available sa susednih
-
-
-
-
-  //posalji price u element za prikaz cene
-  let selectedPrice = document.querySelectorAll('[state="selected"]');    //<--- array of seats
-
-  // dodavanje vrednosti
-  let tot = 0;
-  for (let i = 0; i < selectedPrice.length; i++) {
-    tot += selectedPrice[i].price;
-  }
-
-  //dodaj value u sumu
-  document.getElementById('value').innerText = tot;
 
 
 
