@@ -9,10 +9,11 @@ y = searchParams.get('n'); // col
 //crtanje matrice
 let gridArray = []; //[]ove zagrade znace newArray
 
-let availableElements = document.getElementsByClassName("available");
+// let availableElements = document.getElementsByClassName("available");
 let selectedElements = document.getElementsByClassName("selected");
-let disabledElements = document.getElementsByClassName("disabled");
+// let disabledElements = document.getElementsByClassName("disabled");
 
+// kreiranje array-a
 for (let i = 0; i < x; i++) {
   gridArray[i] = [];
   gridArray[i] = row = document.createElement('div'); //pravi div row
@@ -54,7 +55,7 @@ for (let i = 0; i < x; i++) {
     seat.price = price;
 
     // seat.className = i + '-' + j;
-    seat.innerText = 'Red' + seat.row + ' Colona' + seat.col + ' Cena' + seat.price;
+    seat.innerText = 'Red' + i + ' Colona' + j + ' Cena' + price;
     // seat.onclick = clickSeat;
     seat.addEventListener('click', clickSeat);
 
@@ -64,32 +65,14 @@ for (let i = 0; i < x; i++) {
   }
 }
 function clickSeat() {
-
-  //uzeti vrednosti kliknutog polja
-  a = this.getAttribute("row");
-  b = this.getAttribute("col");
-  //id kliknutog polja je //ne koristi se jos
-  let selectedId = this.id;
-
-  //toggle selekcije
-  // var superToggle = function(element, class0, class1, class2) {
-  //   element.classList.toggle(class0);
-  //   element.classList.toggle(class1);
-  // }
-
-  if (this.classList.contains("available")) {
-    this.classList.remove("available");
-    this.classList.add("selected");
+//ako je available, selektuj
+  if (this.previousSibling.classList.contains("selected") && this.nextSibling.classList.contains("selected")) {
+    alert('nije moguce ponistiti ovo polje');
+  }else{
+    this.classList.toggle("available");
+    this.classList.toggle("selected");
   }
-  else if (this.classList.contains("selected")) {
-    this.classList.remove("selected");
-    this.classList.add("available");
 
-    if (this.previousSibling.classList.contains("selected") && this.nextSibling.classList.contains("selected")) {
-      //ovo puca kad se deselektuje poslednji selektovani element u nizu
-      alert('nije moguce ponistiti ovo polje');
-    }
-  }
 
   //uzmi sve elemente sa klasom selected, a onda pre prvog i posle poslednjeg dodaj available klasu
   let selectedLenght = selectedElements.length;
