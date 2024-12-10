@@ -1,5 +1,5 @@
 //////ARRAY
-
+//file:///C:/Users/sonja/Desktop/Js%20kurs/Git/Zadatak-2/index.html?m=10&n=10
 const grid = document.getElementById("grid");
 
 const searchParams = new URLSearchParams(window.location.search); //izvlacenje broja redova i kolona iz adrese
