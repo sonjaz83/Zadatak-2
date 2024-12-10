@@ -23,7 +23,12 @@
 .COL.selected{
     background: rgb(85, 168, 196);
 }
-.COL.disabled{
+.COL.disabled,
+.COL.disabled-bought{
     background: #ededed;
+    pointer-events: none;
+}
+.COL.bought{
+    background: #13eeca;
     pointer-events: none;
 }
