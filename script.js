@@ -40,9 +40,9 @@ for (let i = 0; i < x; i++) {
     }
     function price(inc){
     if (i < x / 2) {
-      price = 300 + i * inc;
+      price = Math.round((300 + i * inc)* 100) / 100;
     } else {
-      price = 300 + (x - i - 1) * inc;
+      price = Math.round((300 + (x - i - 1) * inc)* 100) / 100;
     }
     }
 
@@ -60,6 +60,7 @@ for (let i = 0; i < x; i++) {
     row.appendChild(seat);
   }
 }
+//funkcija za add/remove klase
 function toggleClasses(element, c1, c2) {
   element.classList.remove(c1);
   element.classList.add(c2);
