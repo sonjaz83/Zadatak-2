@@ -18,54 +18,52 @@ for (let i = 0; i < x; i++) {
   gridArray[i] = [];
   gridArray[i] = row = document.createElement('div'); //pravi div row
   row.setAttribute("class", "ROW-MARK");
-  row.setAttribute("id", i);
+  row.setAttribute("id", i); //ne koristi se
+
   for (let j = 0; j < y; j++) {
-
     gridArray[i][j] = seat = document.createElement('div'); //pravi div seat
-
-    seat.available = true;
-    seat.selected = false;
 
     seat.setAttribute("class", "COL available");
     seat.setAttribute("id", i + '-' + j);
-    // seat.setAttribute("state", "");
     seat.setAttribute("row", i);
     seat.setAttribute("col", j);
 
     //cena ako je m neparan
     if (x % 2 !== 0) {
       let increment = (500 - 300) / ((x - 1) / 2);
-      if (i < x / 2) {
-        price = 300 + i * increment;
-      } else {
-        price = 300 + (x - i - 1) * increment;
-      }
+      price(increment);
     }
     //cena ako je m paran
     else {
       let increment = (500 - 300) / ((x / 2) - 1);
-      if (i < x / 2) {
-        price = 300 + i * increment;
-      } else {
-        price = 300 + (x - i - 1) * increment;
-      }
+      price(increment);
     }
+    function price(inc){
+    if (i < x / 2) {
+      price = 300 + i * inc;
+    } else {
+      price = 300 + (x - i - 1) * inc;
+    }
+    }
+
+    //proveriti zasto se ovo koristi za  kupovinu
     seat.row = i;
     seat.col = j;
     seat.price = price;
 
-    // seat.className = i + '-' + j;
     seat.innerText = 'Red' + i + ' Colona' + j + ' Cena' + price;
-    // seat.onclick = clickSeat;
+
     seat.addEventListener('click', clickSeat);
 
-
+    //iscrtaj grid
     grid.appendChild(row);
     row.appendChild(seat);
   }
 }
+
 function clickSeat() {
 //ako je available, selektuj
+
   if (this.previousSibling.classList.contains("selected") && this.nextSibling.classList.contains("selected")) {
     alert('nije moguce ponistiti ovo polje');
   }else{
@@ -73,61 +71,94 @@ function clickSeat() {
     this.classList.toggle("selected");
   }
 
+  
+const selectedElementsArray = Array.from(selectedElements);
+console.log('selektovani elementi click' + selectedElementsArray);
 
-  //uzmi sve elemente sa klasom selected, a onda pre prvog i posle poslednjeg dodaj available klasu
-  let selectedLenght = selectedElements.length;
+
+
+let selectedLenght = selectedElements.length;
+console.log('ddd' + selectedLenght);
+
   for (let r = 0; r < x; r++) { //niz row-ova
-    for (let c = 0; c < y; c++) { //niz kolona
-      let seatId = document.getElementById(r + '-' + c);
-      //naci min i max elemente
+    for (let c = 0; c < y; c++) { //niz colona
+
+      let elementId = r + '-' + c;
+      let element = document.getElementById(elementId);
+      let price = 0; //cena
+
+      for (let k = 0; k < selectedElements.length; k++) { 
+
+        let selectedRow = selectedElementsArray[0].row;
+        // let selectedCol = selectedElementsArray[k].col;
+        let selectedColMin = selectedElementsArray[0].col - 1;
+        let selectedColMax = selectedElementsArray[selectedElements.length - 1].col + 1;
+        
+        
+          //polje levo
+          let seatLeftId = selectedRow + '-' + selectedColMin;
+          let seatLeft = document.getElementById(seatLeftId);
+          //polje desno
+          let seatRightId = selectedRow + '-' + selectedColMax;
+          let seatRight = document.getElementById(seatRightId);
+
+
+
+  
       if (selectedLenght != 0) {
-        let previousSeat = selectedElements[0].previousSibling;
-        let nextElSeat = selectedElements[selectedLenght - 1].nextSibling;
 
         //disablovati sve ostalo osim selektovanih, prethodnog i sledeceg mesta:
-        if (previousSeat == null) {
-          console.log('jeste null prev');
+        if (seatLeft == null) {
+          // console.log('jeste null prev');
         }
-        else if (nextElSeat == null) {
-          console.log('jeste null next');
+        else if (seatRight == null) {
+          // console.log('jeste null next');
         }
-        else if ((r + '-' + c) != previousSeat.id && (r + '-' + c) != nextElSeat.id) {
+        else if (elementId != seatLeftId && elementId != seatRightId) {
 
-          if (seatId.classList.contains("available")) {
-            seatId.classList.remove("available");
-            seatId.classList.add("disabled");
+          if (element.classList.contains("available")) {
+            element.classList.remove("available");
+            element.classList.add("disabled");
           }
 
         }
 
-        else if ((r + '-' + c) == previousSeat.id) {
+        else if (elementId == seatLeftId) {
 
           //dati available jedan ispred i jedan iza
 
-          if (previousSeat.classList.contains("disabled")) {
-            previousSeat.classList.remove("disabled");
-            previousSeat.classList.add("available");
-          } else if (previousSeat.classList.contains("available")) {
+          if (seatLeft.classList.contains("disabled")) {
+            seatLeft.classList.remove("disabled");
+            seatLeft.classList.add("available");
+          } else if (seatLeft.classList.contains("available")) {
 
           }
 
-        } else if ((r + '-' + c) == nextElSeat.id) {
-          if (nextElSeat.classList.contains("disabled")) {
-            nextElSeat.classList.remove("disabled");
-            nextElSeat.classList.add("available");
-          } else if (nextElSeat.classList.contains("available")) {
+        } else if (elementId == seatRightId) {
+          if (seatRight.classList.contains("disabled")) {
+            seatRight.classList.remove("disabled");
+            seatRight.classList.add("available");
+          } else if (seatRight.classList.contains("available")) {
 
           }
         }
         // }
-      } else if (selectedLenght == 0) {
-        //ako nema vise selektovanih polja, dati svim poljima available
-        seatId.classList.remove("disabled");
-        seatId.classList.add("available");
-      }
+      } 
+      price += selectedElements[k].price;
+      document.getElementById('value').innerText = price;
+    }
+    if (selectedLenght == 0 || selectedLenght == null) {
+      //ako nema vise selektovanih polja, dati svim poljima available
+      element.classList.remove("disabled");
+      element.classList.add("available");
 
+      price = 0;
+      document.getElementById('value').innerText = price;
     }
   }
+
+}
+
   //izracunavanje cene
   let price = 0; //cena
   for (let h = 0; h < selectedLenght; h++) { //niz selektovanih polja
