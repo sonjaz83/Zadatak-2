@@ -60,25 +60,32 @@ for (let i = 0; i < x; i++) {
     row.appendChild(seat);
   }
 }
+function toggleClasses(element, c1, c2) {
+  element.classList.remove(c1);
+  element.classList.add(c2);
+} 
 
 function clickSeat() {
 //ako je available, selektuj
-
-  if (this.previousSibling.classList.contains("selected") && this.nextSibling.classList.contains("selected")) {
+if(this.nextSibling != null && this.previousSibling != null){
+  if ( this.previousSibling.classList.contains("selected") && this.nextSibling.classList.contains("selected")) {
     alert('nije moguce ponistiti ovo polje');
   }else{
     this.classList.toggle("available");
     this.classList.toggle("selected");
   }
+}
+else if(this.nextSibling == null || this.previousSibling == null){
+  this.classList.toggle("available");
+  this.classList.toggle("selected");
+
+}
 
   
 const selectedElementsArray = Array.from(selectedElements);
 console.log('selektovani elementi click' + selectedElementsArray);
 
-
-
 let selectedLenght = selectedElements.length;
-console.log('ddd' + selectedLenght);
 
   for (let r = 0; r < x; r++) { //niz row-ova
     for (let c = 0; c < y; c++) { //niz colona
@@ -101,9 +108,6 @@ console.log('ddd' + selectedLenght);
           //polje desno
           let seatRightId = selectedRow + '-' + selectedColMax;
           let seatRight = document.getElementById(seatRightId);
-
-
-
   
       if (selectedLenght != 0) {
 
@@ -117,10 +121,8 @@ console.log('ddd' + selectedLenght);
         else if (elementId != seatLeftId && elementId != seatRightId) {
 
           if (element.classList.contains("available")) {
-            element.classList.remove("available");
-            element.classList.add("disabled");
+            toggleClasses(element,'available', 'disabled');
           }
-
         }
 
         else if (elementId == seatLeftId) {
@@ -128,16 +130,14 @@ console.log('ddd' + selectedLenght);
           //dati available jedan ispred i jedan iza
 
           if (seatLeft.classList.contains("disabled")) {
-            seatLeft.classList.remove("disabled");
-            seatLeft.classList.add("available");
+            toggleClasses(seatLeft,'disabled', 'available');
           } else if (seatLeft.classList.contains("available")) {
 
           }
 
         } else if (elementId == seatRightId) {
           if (seatRight.classList.contains("disabled")) {
-            seatRight.classList.remove("disabled");
-            seatRight.classList.add("available");
+            toggleClasses(seatRight,'disabled', 'available');
           } else if (seatRight.classList.contains("available")) {
 
           }
@@ -149,14 +149,12 @@ console.log('ddd' + selectedLenght);
     }
     if (selectedLenght == 0 || selectedLenght == null) {
       //ako nema vise selektovanih polja, dati svim poljima available
-      element.classList.remove("disabled");
-      element.classList.add("available");
+      toggleClasses(element,'disabled', 'available');
 
       price = 0;
       document.getElementById('value').innerText = price;
     }
   }
-
 }
 
   //izracunavanje cene
@@ -222,16 +220,20 @@ function confirmSeats() {
       let element = document.getElementById(elementId);
 
       if (element.classList.contains("selected")) {
-        element.classList.replace("selected", "bought");
+        // element.classList.replace("selected", "bought");
+        toggleClasses(element,'selected', 'bought');
       }else if (aroundElementsArray.includes(element.id)  && !element.classList.contains("selected") ) {
-        element.classList.replace("available", "disabled-bought");
-        element.classList.replace("disabled", "disabled-bought");
+        // element.classList.replace("available", "disabled-bought");
+        // element.classList.replace("disabled", "disabled-bought");
+        toggleClasses(element,'available', 'disabled-bought');
+        toggleClasses(element,'disabled', 'disabled-bought');
       }
       else if (!aroundElementsArray.includes(element.id)  && !element.classList.contains("selected")) {
         if(element.classList.contains("disabled-bought")){
         
         }else{
-          element.classList.replace("disabled", "available");
+          // element.classList.replace("disabled", "available");
+          toggleClasses(element,'disabled', 'available');
         }
         
       }
