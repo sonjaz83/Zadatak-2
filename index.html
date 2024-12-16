@@ -1,20 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-  </head>
-  <body>
-<!-- 
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <!-- 
     <input type="number" placeholder="x" id="inputBtnVal" >
     <button onclick="generate()" id="generateBtn">generate</button>
     <br> -->
-    <div id="grid"></div>
-    <label id="value"></label>
-    <button onclick="confirmSeats()">Kupi</button>
+  <div id="grid"></div>
+  <br>
 
-    <script src="script.js"></script>
+  <div class="ROW justify-content-center">
+    <label id="value" class="price-amount">0</label><span>&nbsp;RSD</span>
+  </div>
+  <br>
+  <div class="ROW justify-content-center">
+    <button onclick="emptySeats()" class="btn-delete">Ponisti</button>
+    <button onclick="confirmSeats()" class="btn-buy">Kupi</button>
+  </div>
 
-  </body>
+  <script src="script.js"></script>
+
+</body>
+
 </html>

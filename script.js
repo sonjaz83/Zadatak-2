@@ -6,6 +6,10 @@ const searchParams = new URLSearchParams(window.location.search); //izvlacenje b
 x = searchParams.get('m'); // row
 y = searchParams.get('n'); // col
 
+if(x < 3 || y < 3){
+  alert('Broj redova i kolona treba da bude veci od 2');
+}
+
 //crtanje matrice
 let gridArray = []; //[]ove zagrade znace newArray
 
@@ -117,6 +121,14 @@ function clickSeat() {
 
   priceLabel.innerText = priceSum;
 
+}
+function emptySeats(){
+  for (let c = 0; c < seats.length; c++) { //niz colona
+      toggleClasses(seats[c], 'S', 'A', false);
+      toggleClasses(seats[c], 'D', 'A', false);
+    }
+    priceSum = 0;
+    priceLabel.innerText = priceSum;
 }
 
 function confirmSeats() {
