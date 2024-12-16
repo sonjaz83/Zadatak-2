@@ -7,11 +7,7 @@ body{
     justify-content: center;
     align-items: center;
 }
-.ROW-MARK{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+
 .COL{
     padding: 10px;
     margin: 5px;
@@ -24,15 +20,15 @@ body{
 .COL{
     background: lightblue;
 }
-.COL.selected{
+.COL.S{
     background: rgb(85, 168, 196);
 }
-.COL.disabled,
-.COL.disabled-bought{
+.COL.D,
+.COL.DB{
     background: #ededed;
     pointer-events: none;
 }
-.COL.bought{
+.COL.B{
     background: #13eeca;
     pointer-events: none;
 }
