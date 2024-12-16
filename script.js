@@ -48,7 +48,7 @@ for (let i = 0; i < x; i++) {
     seat.col = j;
     seat.price = price;
 
-    seat.innerText = `Red  ${i} Colona ${j} Cena ${price}`;
+    seat.innerText = `${price}`;
 
     //funkcija za selekciju sedista:
     seat.addEventListener('click', clickSeat);
