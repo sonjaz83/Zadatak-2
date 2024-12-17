@@ -46,17 +46,18 @@ body{
     opacity: 0.8;
 }
 .COL.A{
-    background: lightblue;
+    background-color: lightblue;
 }
 .COL.S{
-    background: rgb(85, 168, 196);
+    background-color: rgb(85, 168, 196) !important;
 }
 .COL.D,
 .COL.DB{
-    background: #ededed;
+    background-color: #ededed !important;
     pointer-events: none;
 }
 .COL.B{
-    background: #13eeca;
+    background-color: #7a7a7a !important;
+    color: #fff;
     pointer-events: none;
 }

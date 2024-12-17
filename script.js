@@ -17,6 +17,8 @@ let selectedElements = document.getElementsByClassName("S");
 let seats = document.getElementsByClassName("COL");
 
 let priceLabel = document.getElementById('value');
+const minPrice = 300;
+const maxPrice = 500;
 let priceSum = 0;
 
 // kreiranje array-a
@@ -31,26 +33,29 @@ for (let i = 0; i < x; i++) {
 
     //cena ako je m neparan
     if (x % 2 !== 0) {
-      let increment = (500 - 300) / ((x - 1) / 2);
+      let increment = (maxPrice - minPrice) / ((x - 1) / 2);
       price(increment);
     }
     //cena ako je m paran
     else {
-      let increment = (500 - 300) / ((x / 2) - 1);
+      let increment = (maxPrice - minPrice) / ((x / 2) - 1);
       price(increment);
     }
     function price(inc) {
       if (i < x / 2) {
-        price = Math.round((300 + i * inc) * 100) / 100;
+        price = Math.round((minPrice + i * inc) * 100) / 100;
       } else {
-        price = Math.round((300 + (x - i - 1) * inc) * 100) / 100;
+        price = Math.round((minPrice + (x - i - 1) * inc) * 100) / 100;
       }
     }
 
-    //proveriti zasto se ovo koristi za  kupovinu
     seat.row = i;
     seat.col = j;
     seat.price = price;
+    //if 500=>0, 300=>255, price=>color
+    //255 - 50 je da min boja ne bude bela
+    colorPrice = ((255 - 50) * (maxPrice - price) ) / (maxPrice - minPrice);
+    seat.style.backgroundColor = `rgb(${colorPrice}, 216, 230)`;
 
     seat.innerText = `${price}`;
 
@@ -93,7 +98,8 @@ function clickSeat() {
       priceSum -= this.price;
     }
   }
-
+  priceLabel.innerText = Math.round(priceSum * 100) / 100; //zaokruzeno zbog buga
+  
   let selectedLenght = selectedElements.length;
 
   //funkcija koja vrti sve elemente
@@ -118,8 +124,6 @@ function clickSeat() {
       toggleClasses(seats[c], 'D', 'A', false);
     }
   }
-
-  priceLabel.innerText = priceSum;
 
 }
 function emptySeats(){
