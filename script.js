@@ -6,58 +6,57 @@ const searchParams = new URLSearchParams(window.location.search); //izvlacenje b
 x = searchParams.get('m'); // row
 y = searchParams.get('n'); // col
 
-if(x < 3 || y < 3){
+if (x < 3 || y < 3) {
   alert('Broj redova i kolona treba da bude veci od 2');
 }
 
 //crtanje matrice
 let gridArray = []; //[]ove zagrade znace newArray
 
-let selectedElements = document.getElementsByClassName("S");
-let seats = document.getElementsByClassName("COL");
-
-let priceLabel = document.getElementById('value');
 const minPrice = 300;
 const maxPrice = 500;
 let priceSum = 0;
 
+let selectedElements = document.getElementsByClassName("S");
+let seats = document.getElementsByClassName("COL");
+let priceLabel = document.getElementById('value');
+
+function calculateIncrement(i) {
+  //fix chatgpt - mathFloor vraca za 1 kod neparnih brojeva da bi se delili sa 2
+  return increment = (maxPrice - minPrice) / Math.floor((x - 1) / 2);
+}
+
+function calculatePrice(increment, i) {
+  if (i < x / 2) {
+    return price = Math.round((minPrice + i * increment) * 100) / 100;
+  } else {
+    return price = Math.round((minPrice + (x - i - 1) * increment) * 100) / 100;
+  }
+}
+
 // kreiranje array-a
 for (let i = 0; i < x; i++) {
+
   gridArray[i] = row = document.createElement('div'); //pravi div row
   row.setAttribute("class", "ROW");
 
+
   for (let j = 0; j < y; j++) {
     gridArray[i][j] = seat = document.createElement('div'); //pravi div seat
-
     seat.setAttribute("class", "COL A");
 
-    //cena ako je m neparan
-    if (x % 2 !== 0) {
-      let increment = (maxPrice - minPrice) / ((x - 1) / 2);
-      price(increment);
-    }
-    //cena ako je m paran
-    else {
-      let increment = (maxPrice - minPrice) / ((x / 2) - 1);
-      price(increment);
-    }
-    function price(inc) {
-      if (i < x / 2) {
-        price = Math.round((minPrice + i * inc) * 100) / 100;
-      } else {
-        price = Math.round((minPrice + (x - i - 1) * inc) * 100) / 100;
-      }
-    }
+    const increment = calculateIncrement(i);
+    calculatePrice(increment, i);
 
     seat.row = i;
     seat.col = j;
     seat.price = price;
     //if 500=>0, 300=>255, price=>color
     //255 - 50 je da min boja ne bude bela
-    colorPrice = ((255 - 50) * (maxPrice - price) ) / (maxPrice - minPrice);
+    colorPrice = ((255 - 50) * (maxPrice - price)) / (maxPrice - minPrice);
     seat.style.backgroundColor = `rgb(${colorPrice}, 216, 230)`;
 
-    seat.innerText = `${price}`;
+    seat.innerText = price;
 
     //funkcija za selekciju sedista:
     seat.addEventListener('click', clickSeat);
@@ -70,15 +69,15 @@ for (let i = 0; i < x; i++) {
 
 //funkcija za add/remove klase
 function toggleClasses(element, c1, c2, toggle) {
-  if (toggle == false) {
+  if (toggle) {
+    element.classList.toggle(c1);
+    element.classList.toggle(c2);
+  }
+  else {
     if (element.classList.contains(c1)) {
       element.classList.remove(c1);
       element.classList.add(c2);
     }
-  }
-  else {
-    element.classList.toggle(c1);
-    element.classList.toggle(c2);
   }
 }
 
@@ -99,11 +98,11 @@ function clickSeat() {
     }
   }
   priceLabel.innerText = Math.round(priceSum * 100) / 100; //zaokruzeno zbog buga
-  
+
   let selectedLenght = selectedElements.length;
 
   //funkcija koja vrti sve elemente
-  for (let c = 0; c < seats.length; c++) { //niz colona
+  Array.from(seats).forEach(seat => { //niz colona
 
     if (selectedLenght != 0) {
 
@@ -111,28 +110,28 @@ function clickSeat() {
       let nextSeat = selectedElements[selectedElements.length - 1].nextSibling;
 
       //dati available prethodnom i sledecem
-      if (seats[c] == prevSeat || seats[c] == nextSeat) {
-        toggleClasses(seats[c], 'D', 'A', false);
+      if (seat == prevSeat || seat == nextSeat) {
+        toggleClasses(seat, 'D', 'A', false);
 
       } else {
         //dati disabled svim ostalim elementima prethodnom i sledecem
-        toggleClasses(seats[c], 'A', 'D', false);
+        toggleClasses(seat, 'A', 'D', false);
 
       }
     } else if (selectedLenght == 0 || selectedLenght == null) {
       //ako nema vise selektovanih polja, dati svim poljima available
-      toggleClasses(seats[c], 'D', 'A', false);
+      toggleClasses(seat, 'D', 'A', false);
     }
-  }
+  });
 
 }
-function emptySeats(){
-  for (let c = 0; c < seats.length; c++) { //niz colona
-      toggleClasses(seats[c], 'S', 'A', false);
-      toggleClasses(seats[c], 'D', 'A', false);
-    }
-    priceSum = 0;
-    priceLabel.innerText = priceSum;
+function emptySeats() {
+  Array.from(seats).forEach(seat => { //niz colona
+    toggleClasses(seat, 'S', 'A', false);
+    toggleClasses(seat, 'D', 'A', false);
+  });
+  priceSum = 0;
+  priceLabel.innerText = priceSum;
 }
 
 function confirmSeats() {
@@ -148,26 +147,25 @@ function confirmSeats() {
     let prevSeat = selectedElements[0].previousSibling;
     let nextSeat = selectedElements[selectedElements.length - 1].nextSibling;
 
-    for (let c = 0; c < seats.length; c++) { //niz colona
+    Array.from(seats).forEach(seat =>  { //niz colona
 
-      if (seats[c].classList.contains("S")) {
-        toggleClasses(seats[c], 'S', 'B', false);
+      if (seat.classList.contains("S")) {
+        toggleClasses(seat, 'S', 'B', false);
       }
       //isti red prev i next
       //red ispod i iznad
-      else if (seats[c] == prevSeat ||
-        seats[c] == nextSeat ||
-        ((seats[c].row == selectedRowPrevious || seats[c].row == selectedRowNext) &&
-          seats[c].col >= selectedColMin && seats[c].col <= selectedColMax)
-      ) {
-        toggleClasses(seats[c], 'A', 'DB', false);
-        toggleClasses(seats[c], 'D', 'DB', false);
+      else if (seat == prevSeat ||
+        seat == nextSeat ||
+        ((seat.row == selectedRowPrevious || seat.row == selectedRowNext) &&
+          seat.col >= selectedColMin && seat.col <= selectedColMax)) {
+        toggleClasses(seat, 'A', 'DB', false);
+        toggleClasses(seat, 'D', 'DB', false);
       }
-
+      //svi ostali
       else {
-        toggleClasses(seats[c], 'D', 'A', false);
+        toggleClasses(seat, 'D', 'A', false);
       }
-    }
+    });
 
     priceSum = 0; //ponisti cenu
     priceLabel.innerText = priceSum;
